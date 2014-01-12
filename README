@@ -1,0 +1,345 @@
+Symmetric Potential Scripts
+
+    ---> bound_states_eigensystem_Numerov_symm_pot_1D_tise.m
+
+     Compute bound state eigenvalues and eigenstates for a symmetric 1D potential
+     solving the 1D Scroedinger equation using Numerov algorithm.
+
+     Called from basic_definitions script.
+
+     Functions :
+
+     (1) woods_saxon_1D(x)  1D Woods Saxon Potential function)
+
+     (2) wdiff_Numerov_lr(e)  Difference between right and left wave
+     function at x_M for energy e
+
+     (3) w_Numerov_lr(energy)  right and left wave function and 1st derivatives at x_M
+
+     (4) wf_Numerov_bound(e)  Build eigenstate with energy e
+
+     (5) f_secant("fun", x0, x1, tol) Solve fun(x) = 0 using the secant algorithm
+
+
+     Data:
+
+
+     Files: 
+
+
+    ---> continuum_symm_states_Numerov_symm_pot_1D_tise.m
+
+     Compute Momentum-normalized symmetric and antisymmetric continuum
+     states for a symmetric 1D potential. Symmetric ad antisymmetric
+     combinations of plane wave functions coming from the right and
+     the left. 
+
+     Called from basic_definitions script.
+
+     Functions:
+
+     (1) wf_Numerov_cont_expl(k) : Compute the positive energy wf with
+     left incoming initial condition
+
+     (2) wf_Numerov_cont_expr(k) : Compute the positive energy wf with
+     left incoming initial condition 
+
+     (3) Potential function : e.g. woods_saxon_1D(xgrid) 
+
+     Data:
+
+
+     Files: 
+
+
+
+
+    ---> continuum_states_Numerov_symm_pot_1D_tise.m
+
+     Compute Momentum-normalized continuum states for a symmetric 1D
+     potential. Plane wave functions coming from the right and the
+     left.
+
+
+     Functions:
+
+     (1) wf_Numerov_cont_expl(k) : Compute the positive energy wf with
+     left incoming initial condition
+
+     (2) wf_Numerov_cont_expr(k) : Compute the positive energy wf with
+     left incoming initial condition 
+
+     (3) Potential function : e.g. woods_saxon_1D(xgrid) 
+
+     Data:
+
+
+     Files: 
+
+
+
+    ---> bound_states_sum_rules_Numerov_symm_pot_1D_tise.m
+
+     Compute total strength for Operator = x^2 and each bound state
+     wave function testing the closure of the bound + continuum wave functions
+
+
+     Called from basic_definitions script.
+
+ 
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+     - eigenvectors from Fortran code. Bound states and pseudostates. 
+       e.g. "isqw_eigenvectors_N150.dat"
+
+     - gerade and ungerade continuum wave functions for symmetric potential.
+       computed with Octave program: "continuum_symm_states_Numerov_symm_pot_1D_tise.m" 
+       e.g. "wfc_octave_symm_Moschini.dat", "wfc_octave_asymm_Moschini.dat"
+
+
+    ---> dBdE_pure_cont_symm_states_Numerov_symm_pot_1D_tise.m
+
+     Electric dipole or quadrupole dB/dE in bound-continuum transitions.
+
+     Compute dB/dE(E\lambda)(i->k) = \frac{\mu k}{(2\pi)^3\hbar^2}
+     \times |<\fi_k|M(E\lambda)|\psi_i>|^2 for \lambda = 1 or 2
+
+
+     Called from basic_definitions script.
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+     - eigenvectors from Fortran code. Bound states and pseudostates. 
+       e.g. "isqw_eigenvectors_N150.dat"
+
+     - gerade and ungerade continuum wave functions for symmetric potential.
+       computed with Octave program: "continuum_symm_states_Numerov_symm_pot_1D_tise.m" 
+       e.g. "wfc_octave_symm_Moschini.dat", "wfc_octave_asymm_Moschini.dat"
+
+
+
+    ---> pseudodensity_symm_states_Numerov_symm_pot_1D_tise.m
+
+     Compute pseudodensity matrix: overlaps between true continuum
+     eigenfunctions (momentum normalized) and pseudostates for a
+     symmetric 1D potential. 
+
+       <\psi_j|\phi_k>_g + <\psi_j|\phi_k>_u 
+
+       |\psi_j> :: j-th pseudostate
+
+       |\phi_k>_g/u :: Symmetric ad antisymmetric combinations of
+       plane wave functions with moment k coming from the right and
+       the left. 
+
+
+     Called from basic_definitions script.
+
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+     - eigenvectors from Fortran code. Bound states and pseudostates. 
+       e.g. "isqw_eigenvectors_N150.dat"
+
+     - gerade and ungerade continuum wave functions for symmetric potential.
+       computed with Octave program: "continuum_symm_states_Numerov_symm_pot_1D_tise.m" 
+       e.g. "wfc_octave_symm_Moschini.dat", "wfc_octave_asymm_Moschini.dat"
+
+
+
+    ---> dBdE_pseudostates_symm_states_Numerov_symm_pot_1D_tise.m
+
+     Compute dB/dE(E\lambda)(i->k) = \frac{\mu k}{(2\pi)^3\hbar^2}
+     \times | \sum_j <\fi_k|\psi_j><\psi_j|M(E\lambda)|\psi_i> |^2 for \lambda = 1 or 2
+
+     Dress the pseudostates with true continuum wave functions
+
+
+
+     Called from basic_definitions script.
+
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+     - states pseudodensity <\fi_k|\psi_j>. Octave code pseudodensity_symm_state_Numerov_symm_pot_1D_tise.m
+       e.g. "wfc_octave_rho_ISQW_Moschini.dat"
+
+     - pseudostates transition moment <\psi_i|M(E)|\psi_j>. Fortran code.
+       e.g. "isqw_E1_TM_N150_1.dat" or "isqw_E2_TM_N150_3.dat"
+
+
+
+
+
+    ---> bins_continuum_normalized_symmetry_Numerov_symm_pot_1D_tise.m
+
+     Build bins and compute normalized symmetric and antisymmetric
+     states using the average method with the continuum states for a
+     symmetric 1D potential. Computes symmetric ad antisymmetric
+     combinations of plane wave functions coming from the right and
+     the left.  
+
+
+     Functions:
+
+     (1) wf_Numerov_cont_expl(k) : Compute the positive energy wf with
+     left incoming initial condition
+
+     (2) wf_Numerov_cont_expr(k) : Compute the positive energy wf with
+     left incoming initial condition 
+
+     (3) Potential function : e.g. woods_saxon_1D(xgrid) 
+
+     Data:
+
+
+     Files: 
+
+
+
+    ---> Function wf_Numerov_cont_expl(k): wf_Numerov_cont_expl.m 
+
+     Usage :
+
+     [wf] = wf_Numerov_cont_expl(k0)
+
+     Numerov algorithm reconstructed continuum wf with left incoming
+     wave function.   
+
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+
+
+    ---> Function wf_Numerov_cont_expr(k): wf_Numerov_cont_expr.m 
+
+     Usage :
+
+     [wf] = wf_Numerov_cont_expr(k0)
+
+     Numerov algorithm reconstructed continuum wf with right incoming
+     wave function.   
+
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+
+
+    ---> Function woods_saxon_1D(xgrid): woods_saxon_1D.m 
+
+     Usage :
+
+     potval = woods_saxon_1D(x)
+
+     1D Woods-Saxon potential function
+
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+
+
+    ---> Function w_Numerov_lr(e): w_Numerov_lr.m
+ 
+     Usage ::
+
+     [w_left w_right w'_left w'_right] = w_Numerov_lr(energy)
+
+     Numerov reconstructed normalized wf and first derivative at both
+     sides of the matching point. Symmetric 1D TISE. 
+
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+
+
+
+
+    ---> Function wdiff_Numerov_lr(e): wdiff_Numerov_lr.m
+ 
+     Usage ::
+
+     wf_difference = wdiff_Numerov_lr(energy)
+
+     Difference between the right and left values of a Numerov
+     reconstructed wf at both sides of the matching point. Symmetric 1D TISE. 
+
+
+     Functions:
+
+    (1) w_Numerov_lr(energy)  right and left wave function and 1st derivatives at x_M
+
+
+     Data:
+
+
+     Files: 
+
+
+
+    ---> Function wf_Numerov_bound(e): wf_Numerov_bound.m
+ 
+     Usage ::
+
+     wavefunction = w_Numerov_bound(engy)
+
+     Normalized wave function with energy=engy < 0 (bound state) obtained solving the 1D TISE with
+     a Numerov Algorith.
+
+
+     Functions:
+
+
+     Data:
+
+
+     Files: 
+
+
