@@ -1,6 +1,6 @@
-## continuum_symm_states_Numerov_symm_pot_1D_tise.m
+## continuum_symm_states_Numerov_gen_pot_1D_tise.m
 ##
-## Compute Momentum-normalized symmetric and antisymmetric continuum states for a symmetric 1D potential. 
+## Compute Momentum-normalized symmetric and antisymmetric continuum states for a general 1D potential. 
 ## Symmetric ad antisymmetric combinations of plane wave functions coming from the right and the left.
 ##
 ## Functions:
@@ -180,7 +180,7 @@ for k_val = k_values
   if (iSM_save == 1) 
     ## Save R, T, and S matrix
     ## Format k E R T Re(s_aa) Im(s_aa) Re(s_ab) Im(s_ab) Re(s_bb) Im(s_bb)
-    savemat_Smat = [savemat_Smat; k_val energy abs(ref_c)^2 1-abs(ref_c)^2  imag(ref_c) real(trans_c) imag(trans_c) real(ref_c) imag(ref_c)];
+    savemat_Smat = [savemat_Smat; k_val energy abs(ref_c)^2 1-abs(ref_c)^2 real(ref_c) imag(ref_c) real(trans_c) imag(trans_c) real(ref_c) imag(ref_c)];
   endif
   ##
   if ( iprint > 1 )

@@ -9,7 +9,7 @@
 ##
 ##
 ## Verbosity flag
-global iprint = 2;
+global iprint = 1;
 ##
 ## graphics_toolkit("fltk")
 ##
@@ -38,6 +38,12 @@ if ( iprint >= 1 )
 endif
 ## 
 ##
+## Momentum grid (fm-1)
+global k_min = 0.025; # fm-1
+global k_max = 2.0; # fm-1
+global n_k_points = 120;
+global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
+global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ## Energy grid (MeV) (uncomment next lines and comment the  k grid lines)
 ##global E_min = 0.1;  # MeV
 ##global E_max = 25.0; # MeV
@@ -103,3 +109,32 @@ if ( iprint >= 1 )
 endif
 ##
 bound_states_eigensystem_Numerov_gen_pot_1D_tise
+##
+if ( iprint >= 1 )
+  disp(" ");
+endif
+##
+## Continuum Eigenstates
+##
+## Save continuum states wave function
+global iwf_cont_save = 1;
+##  Continuum Eigenstates filenames 
+wf_filename = "wf_octave_continuum_gen_Morse";
+##
+## Save S matrix
+global iSM_save = 1; 
+##  S Matrix Filename
+global smat_filename = "smatrix_octave_gen_Morse.dat";
+##
+## Left (0) or right (1) incoming continuum wave functions
+global side_wf = 1;
+##
+if ( iprint >= 1 )
+  disp("");
+  disp("####################################################################");
+  disp("###################  Continuum states ##############################");
+  disp("####################################################################");
+  disp("");
+endif
+##
+continuum_states_Numerov_gen_pot_1D_tise;
