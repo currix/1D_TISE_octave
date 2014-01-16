@@ -18,8 +18,6 @@ function wf = wf_Numerov_cont_expl(k0)
   global hbarc;
   global red_mass;
   global npoints;
-  global xmin;
-  global xmax;
   global vpot;
   ##
   ## Define gn
