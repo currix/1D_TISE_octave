@@ -106,7 +106,7 @@ if ( iprint >= 1 )
   disp("");
 endif
 ##
-bound_states_eigensystem_Numerov_gen_pot_1D_tise
+bound_states_eigensystem_Numerov_symm_pot_1D_tise
 ##
 if ( iprint >= 1 )
   disp(" ");
@@ -133,3 +133,24 @@ if ( iprint >= 1 )
 endif
 ##
 continuum_symm_states_Numerov_gen_pot_1D_tise;
+##
+##
+## Test sum rules
+##
+## Total Strength
+##
+global iSum_Rules_save = 1;
+##
+## Continuum symmetrized states
+wf_filename = "wf_octave_continuum_gen_WS";
+##
+if ( iprint >= 1 )
+  disp("");
+  disp("####################################################################");
+  disp("############### Bound States Sum Rules #############################");
+  disp("####################################################################");
+  disp("");
+endif
+##
+bound_states_sum_rules_Numerov_gen_pot_1D_tise;
+##
