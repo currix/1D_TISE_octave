@@ -38,7 +38,7 @@ global hsqoamu; # MeV fm^2
 ## Spatial grid
 global xmin; 
 global xmax; 
-global npoint;
+global npoints;
 global xgrid; 
 global x_step;
 ## 
@@ -64,7 +64,9 @@ endif
 global k_values; ## Vector with k momentum values
 global E_values; ## Vector with E energy values
 ##
-if (iprint == 1)
+pot_limit = 1.0E04;
+##
+if (iprint > 1)
   disp("K_values");
   k_values ## k values
   disp("E_values");
@@ -83,6 +85,31 @@ if (iSM_save == 1)
   savemat_Smat = [];
 endif
 ##
+##
+## Redefine xgrid, vpot, and npoints
+##
+if (side_wf == 1) ## Needs to do the other case... 
+  ## Limit xgrid to values with potential values - energy values > pot_limit
+  for index = [1:npoints]
+    if (morse_1D(xgrid(index))-energy < pot_limit) 
+      index_limit = index;
+      break
+    endif
+  endfor
+  ##
+  if ( iprint >= 1 )
+    printf("index %i, xval %f, potval %f", index_limit, xgrid(index_limit), vpot(index_limit))
+  endif
+  ##
+  ## Redefine xgrid, vpot, and npoints
+  xgrid_save = xgrid;
+  xgrid = xgrid(index_limit:npoints);
+  vpot_save = vpot;
+  vpot = vpot(index_limit:npoints);
+  npoints_save = npoints;
+  npoints = npoints - (index_limit - 1);
+endif
+##
 ######  for energy = energies # main loop in case Fix E instead of Fix k
 for k_val = k_values 
   ##
@@ -93,8 +120,8 @@ for k_val = k_values
   ##
   ##
   if (side_wf == 0) 
-     wfc = wf_Numerov_cont_expl(k_val); # Left incoming positive energy eigenstates
-
+    wfc = wf_Numerov_cont_expl(k_val); # Left incoming positive energy eigenstates
+    ##
     ## Compute phase shift delta and normalization constant A
     index_xmin = 3; ## 3 instead of 1 for computing the derivative later
     xmin_val = xgrid(index_xmin);
@@ -146,15 +173,20 @@ for k_val = k_values
     ##
     ##
   else
+    ##
+    ##
     ## Build wave function using Numerov algorithm 
     wfc = wf_Numerov_cont_expr(-k_val); # Right incoming positive energy eigenstates
+    ##
+    ## Prepend zeros to wfc
+    wfc = [zeros(1,index_limit-1) wfc];
     ##
     ##
     ## Compute r, t, and normalization constant A
     ##
-    index_xmin = 3; 
-    xmin_val = xgrid(index_xmin);
-    uxmin = wfc(index_xmin); 
+    ##index_xmin = 3; 
+    ##xmin_val = xgrid(index_xmin);
+    ##uxmin = wfc(index_xmin); 
     ##
     index_xmax = npoints - 2; ## npoints - 2 for computing the derivative
     xmax_val = xgrid(index_xmax);
@@ -186,12 +218,12 @@ for k_val = k_values
     savemat_wfc = [savemat_wfc; wfc];
   endif
   ##
-  if ( iprint > 1 )
-    icont = input("Continue with next k value? ");
-    clf;
-  endif
-  ##
 endfor
+##
+## Restore previous values of xgrid and vpot and fill with zeros initial wfc values
+xgrid = xgrid_save;
+vpot = vpot_save;
+npoints = npoints_save;
 ##
 ## Save S matrix
 if (iSM_save == 1)
