@@ -35,7 +35,7 @@ global hsqoamu; # MeV fm^2
 ## Spatial grid
 global xmin; 
 global xmax; 
-global npoint;
+global npoints;
 global xgrid; 
 global x_step;
 ## 
