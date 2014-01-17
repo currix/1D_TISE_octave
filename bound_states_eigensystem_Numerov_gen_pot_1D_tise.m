@@ -40,7 +40,7 @@ global vpot;
 global match_p;
 ###########################################################################
 ###########################################################################
-if ( iprint == 1 )
+if ( iprint >= 1 )
   disp("Computing bound states energies and wavefunctions.");
 endif
 ###########################################################################
@@ -48,8 +48,9 @@ endif
 ##
 ## Plot Potential
 ##clf # clear figure
-plot(xgrid, vpot, "linewidth", 3)
-hold on
+if ( iprint > 0 )
+  plot(xgrid, vpot, "linewidth", 3)
+endif
 ###########################################################################
 ###########################################################################
 ###########################################################################
@@ -74,8 +75,8 @@ global norm_val;
 ##
 global right_val;
 ########################################################################
-tolerance_wf = 1.0;
-tolerance_wfp = 1.0;
+tolerance_wf = 10.0;
+tolerance_wfp = 10.0;
 ########################################################################
 ## e min
 energy = e0;
@@ -122,6 +123,8 @@ while (energy < e_threshold)
       ##
     else
       ##
+      norm_val = 1;
+      right_val = 1;
       [wfl wfr wpfl wpfr] = w_Numerov_lr_general(eigenval);
       ##
       if ( iprint >= 1 )
@@ -134,6 +137,7 @@ while (energy < e_threshold)
       endif
       ##
       if (2*abs((wfl-wfr)/(wfl+wfr)) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## This needs justification 
+      ##if (abs(wfl-wfr) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## renormalized to one wave functions
         ##
         if (iprint >= 1) 
           printf("%i-th eigenvalue found = %f\n", nodes_num, eigenval);
@@ -146,9 +150,11 @@ while (energy < e_threshold)
         ##
         ##   Plot Wave Function
         ## figure(2) ## for a new figure uncomment this
-        hold on
-        scale = 5;
-        plot(xgrid, eigenval + scale*wf)    
+        if (iprint > 0)
+	  hold on
+          scale = 5;
+          plot(xgrid, eigenval + scale*wf)    
+	endif
         ##
         nodes_num++;
         wflr1 = wdiff_Numerov_lr_gen(energy + delta_e); # Recompute wflr1 with new parity
