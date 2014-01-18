@@ -104,25 +104,25 @@ while (energy < e_threshold)
     eigenval = fzero("wdiff_Numerov_lr", [energy, energy+delta_e], optimset("TolX",tol_fzero));
     ##
     ## check and print results
-    if (eigenval == "Max_It") ## Maximum number of iterations in secant achieved
+    ##
+    [wfl wfr wpfl wpfr] = w_Numerov_lr(eigenval);
+    ##
+    if ( iprint >= 1 )
       ##
-      if ( iprint >= 1 )
-        printf(" Maximum number of iterations in secant algorithm\n")
-      endif
+      printf("Possible eigenvalue = %15.8e\n", eigenval);
       ##
-    else
+      printf("Matching data (I)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
       ##
-      ##
-      [wfl wfr wpfl wpfr] = w_Numerov_lr(eigenval);
-      ##
+    endif
+    ##
+    if (sign(wpfl*wpfr) > 0)
+      ## Derivatives with same sign. 
       if ( iprint >= 1 )
         ##
-        printf("Possible eigenvalue = %15.8e\n", eigenval);
-        ##
-        printf("Matching data (I)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
         printf("Matching data (II) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
         ##
       endif
+      ##
       ##
       if (2*abs((wfl-wfr)/(wfl+wfr)) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## This needs justification 
         ##
@@ -144,7 +144,7 @@ while (energy < e_threshold)
         nodes_num++;
         wflr1 = wdiff_Numerov_lr(energy + delta_e); # Recompute wflr1 with new parity
         if (iwf_bound_save == 1)
-	## save Wave Function
+	  ## save Wave Function
 	  savemat = [xgrid; wf]';
 	  filename = sprintf("%s_%i.dat", wf_filename, nodes_num);
 	  save(filename,"savemat");
@@ -152,10 +152,15 @@ while (energy < e_threshold)
         ##
       endif
       ##
+    else
+      ##
+      if (iprint >= 1) 
+        printf("Derivatives with different signs\n");
+      endif
+      ##
     endif
     ##
   endif
-  ##
   ##
   energy += delta_e;
   wflr0 = wflr1;

@@ -105,17 +105,10 @@ while (energy < e_threshold)
       printf("Possible eigenvalue %i found in interval (%15.8e,%15.8e) - (%15.8e,%15.8e).\n Applying fzero \n", nodes_num, energy, wflr0, energy+delta_e, wflr1);
     endif
     ##
-    ##eigenval = f_secant("wdiff_Numerov_lr_gen", energy, energy+delta_e, tol_secant);
     eigenval = fzero("wdiff_Numerov_lr_gen", [energy,energy+delta_e], optimset("TolX",tol_fzero));
     ##
     ## check and print results
-    if (eigenval == "Max_It") ## Maximum number of iterations in secant achieved
-      ##
-      if ( iprint >= 1 )
-        printf(" Maximum number of iterations in secant algorithm\n")
-      endif
-      ##
-    elseif (abs(eigenval) > abs(energy) || abs(eigenval) < abs(energy + delta_e)) ## Check whether routine is out of the search interval
+    if (abs(eigenval) > abs(energy) || abs(eigenval) < abs(energy + delta_e)) ## Check whether routine is out of the search interval
       ##
       if ( iprint >= 1 )
         printf(" Wrong eigenvalue buddy... Keep on searching!\n")
@@ -132,39 +125,53 @@ while (energy < e_threshold)
         printf("Possible eigenvalue = %15.8e\n", eigenval);
         ##
         printf("Matching data (I)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
-        printf("Matching data (II) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
         ##
       endif
       ##
-      if (2*abs((wfl-wfr)/(wfl+wfr)) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## This needs justification 
-      ##if (abs(wfl-wfr) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## renormalized to one wave functions
-        ##
-        if (iprint >= 1) 
-          printf("%i-th eigenvalue found = %f\n", nodes_num, eigenval);
-        endif
-        ##
-        eigenvalues = [eigenvalues, eigenval];
-        ##
-        ## Build Wave Function
-        wf = wf_Numerov_bound_general(eigenval);
-        ##
-        ##   Plot Wave Function
-        ## figure(2) ## for a new figure uncomment this
-        if (iprint > 0)
-	  hold on
-          scale = 5;
-          plot(xgrid, eigenval + scale*wf)    
+      if (sign(wpfl*wpfr) > 0)
+	## Derivatives with same sign. 
+	if ( iprint >= 1 )
+          ##
+          printf("Matching data (II) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
+          ##
 	endif
-        ##
-        nodes_num++;
-        wflr1 = wdiff_Numerov_lr_gen(energy + delta_e); # Recompute wflr1 with new parity
-        if (iwf_bound_save == 1)
-	## save Wave Function
-	  savemat = [xgrid; wf]';
-	  filename = sprintf("%s_%i.dat", wf_filename, nodes_num);
-	  save(filename,"savemat");
-        endif
-        ##
+	##
+	if (2*abs((wfl-wfr)/(wfl+wfr)) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## This needs justification 
+          ##
+          if (iprint >= 1) 
+            printf("%i-th eigenvalue found = %f\n", nodes_num, eigenval);
+          endif
+          ##
+          eigenvalues = [eigenvalues, eigenval];
+          ##
+          ## Build Wave Function
+          wf = wf_Numerov_bound_general(eigenval);
+          ##
+          ##   Plot Wave Function
+          ## figure(2) ## for a new figure uncomment this
+          if (iprint > 0)
+	    hold on
+            scale = 5;
+            plot(xgrid, eigenval + scale*wf)    
+	  endif
+          ##
+          nodes_num++;
+          wflr1 = wdiff_Numerov_lr_gen(energy + delta_e); # Recompute wflr1 with new parity
+          if (iwf_bound_save == 1)
+	    ## save Wave Function
+	    savemat = [xgrid; wf]';
+	    filename = sprintf("%s_%i.dat", wf_filename, nodes_num);
+	    save(filename,"savemat");
+          endif
+          ##
+	endif
+	##
+      else
+	##
+	if (iprint >= 1) 
+          printf("Derivatives with different signs\n");
+	endif
+	##
       endif
       ##
     endif
