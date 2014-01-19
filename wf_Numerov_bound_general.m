@@ -60,19 +60,19 @@ function wf = wf_Numerov_bound_general(e0)
   else
     mu_min = mu_min_minus;
   endif
-  ##   
+  ## Wave function   
   y_left(1) = norm_val;
   y_left(2) = y_left(1)/(1 - mu_min);
   ##
   ## Rescaled wave function
-  y0_left(1) = y_left(1)*aux_vec(1);
-  y0_left(2) = y_left(2)*aux_vec(2);
+  Y_left(1) = y_left(1)*aux_vec(1);
+  Y_left(2) = y_left(2)*aux_vec(2);
   ##
   for index = 3:match_p + 2 # Plus 2 for slope calculation
-    y0_left(index) = 2*y0_left(index - 1) - y0_left(index - 2) - y0_left(index - 1)*gn(index-1)*x_step**2;
+    Y_left(index) = 2*Y_left(index - 1) - Y_left(index - 2) - Y_left(index - 1)*gn(index-1)*x_step**2;
   endfor
   ##
-  y_left = y0_left ./ aux_vec(1:match_p + 2);
+  y_left = Y_left ./ aux_vec(1:match_p + 2);
   ##
   ##
   ## Right branch
@@ -92,17 +92,25 @@ function wf = wf_Numerov_bound_general(e0)
   y_right(npoints - 1) = y_right(npoints)*(1 - mu_min);
   ##
   ## Rescaled wave function
-  y0_right(npoints) = y_right(npoints)*aux_vec(npoints);
-  y0_right(npoints - 1) = y_right(npoints - 1)*aux_vec(npoints - 1);
+  Y_right(npoints) = y_right(npoints)*aux_vec(npoints);
+  Y_right(npoints - 1) = y_right(npoints - 1)*aux_vec(npoints - 1);
   ##
   for index = npoints-2:-1:match_p - 2 # Minus 2 for slope calculation
     ##
-    y0_right(index) = 2*y0_right(index + 1) - y0_right(index + 2) - y0_right(index + 1)*gn(index + 1)*x_step**2;
+    Y_right(index) = 2*Y_right(index + 1) - Y_right(index + 2) - Y_right(index + 1)*gn(index + 1)*x_step**2;
     ##
   endfor
   ##
-  y_right = y0_right ./ aux_vec;
+  y_right = Y_right ./ aux_vec;
   ##
+  ## Left and Right Derivatives :: Two Steps Centered difference
+  wpfl = ( y_left(match_p + 1) - y_left(match_p - 1)  - (1/8)*y_left(match_p + 2) + (1/8)*y_left(match_p - 2) ) / (3*x_step/2);
+  ##
+  wpfr = ( y_right(match_p + 1) - y_right(match_p - 1)  - (1/8)*y_right(match_p + 2) + (1/8)*y_right(match_p - 2) ) / (3*x_step/2);
+  ##
+  ##
+  ## Make equal derivatives at the matching point
+  y_right = y_right .* (wpfl/wpfr)
   ## Unnormalized WF
   wf_unnor = [y_left(1:match_p), y_right(match_p+1:npoints)]; 
   ##
