@@ -145,6 +145,8 @@ while (energy < e_threshold)
           eigenvalues = [eigenvalues, eigenval];
           ##
           ## Build Wave Function
+	  norm_val = 1;
+	  right_val = 1;
           wf = wf_Numerov_bound_general(eigenval);
           ##
           ##   Plot Wave Function
