@@ -21,9 +21,9 @@ global hsqoamu = 41.4713768; # MeV fm^2
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid
-global xmin = -35; # (fm)
-global xmax = 35;  # (fm)
-global npoints = 1003; 
+global xmin = -20; # (fm)
+global xmax = 20;  # (fm)
+global npoints = 1005; 
 global xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npoints points (fm)
 global x_step = (xmax-xmin)/(npoints-1); # (fm)
 ##
@@ -63,7 +63,7 @@ global a_ws = 0.5; # Potential Diffusivity (fm)
 global vpot =  woods_saxon_1D(xgrid);
 ##
 ## Match Point (jeje, bound states calculation)
-global match_p = 400;
+global match_p = 450;
 ##
 ## Output
 if ( iprint >= 1 )
@@ -80,7 +80,7 @@ if ( iprint >= 1 )
 endif
 ##
 ## Matrix diagonalization states
-global eigenvectors_file = "ho_eigenvectors_N120.dat";
+global eigenvectors_file = "ho_eigenvectors_N120_wsaxon.dat";
 global dim_N = 120;
 global bound_states = 4;
 global pseudo_states = dim_N - bound_states;
@@ -152,5 +152,28 @@ if ( iprint >= 1 )
   disp("");
 endif
 ##
-bound_states_sum_rules_Numerov_gen_pot_1D_tise;
+bound_states_sum_rules_Numerov_symm_pot_1D_tise;
 ##
+##
+## Response function dB/dE computed with continuum states
+##
+global i_E = 1; ## 1 -> E1  :: 2 -> E2
+##
+global isave_dBdE = 1;
+##
+## Continuum symmetrized states
+wf_filename = "wf_octave_continuum_gen_WS";
+##
+## Response function filename
+global dBdE_filename = "response_function_continuum_gen_WS";
+##
+##
+if ( iprint >= 1 )
+  disp(" ");
+  disp("####################################################################");
+  disp("############### Response Function (continuum) ######################");
+  disp("####################################################################");
+  disp(" ");
+endif
+##
+dBdE_pure_cont_symm_states_Numerov_gen_pot_1D_tise;
