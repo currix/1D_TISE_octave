@@ -52,7 +52,7 @@ global vpot;
 ##
 ## Plot Potential
 ##clf # clear figure
-if ( iprint == 1 )
+if ( iprint > 1 )
   hold on
   plot(xgrid, vpot, "linewidth", 3)
 endif
