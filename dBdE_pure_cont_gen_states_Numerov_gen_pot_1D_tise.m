@@ -66,6 +66,8 @@ global n_k_points; # Number of k values
 global k_values; # vector with k values
 global E_values; # vector with energy values
 ##
+global wf_filename;
+##
 ## Read continuum wave functions
 if (side_wf == 0) 
   side = "left";

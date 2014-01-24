@@ -177,3 +177,26 @@ if ( iprint >= 1 )
 endif
 ##
 dBdE_pure_cont_symm_states_Numerov_gen_pot_1D_tise;
+##
+## Pseudodensity calculation
+##
+if ( iprint >= 1 )
+  disp(" ");
+  disp("####################################################################");
+  disp("##################### Quasidensity matrix ##########################");
+  disp("####################################################################");
+  disp(" ");
+endif
+##
+##
+## Save density function
+global idensity_save = 1;
+##
+##  Continuum Eigenstates filenames 
+wf_filename = "wf_octave_continuum_gen_WS";
+##
+##  Quasidensity filename 
+global qdensity_filename = "wfc_rho_gen_WS";
+##
+##
+pseudodensity_symm_states_Numerov_symm_pot_1D_tise;

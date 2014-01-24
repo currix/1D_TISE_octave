@@ -20,8 +20,8 @@ global hsqoamu = 41.4713768; # MeV fm^2
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid
-global xmin = -30; # (fm)
-global xmax = 30;  # (fm)
+global xmin = -45; # (fm)
+global xmax = 45;  # (fm)
 global npoints = 1005; 
 global xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npoints points (fm)
 global x_step = (xmax-xmin)/(npoints-1); # (fm)
@@ -62,7 +62,7 @@ global a_ws = 0.5; # Potential Diffusivity (fm)
 global vpot =  woods_saxon_1D(xgrid);
 ##
 ## Match Point (jeje, bound states calculation)
-global match_p = 400;
+global match_p = 450;
 ##
 ## Output
 if ( iprint >= 1 )
@@ -173,7 +173,6 @@ endif
 ##
 dBdE_pure_cont_symm_states_Numerov_symm_pot_1D_tise;
 ##
-keyboard()
 ##
 ## Pseudodensity calculation
 ##
@@ -185,7 +184,7 @@ global idensity_save = 1;
 wf_filename = "wf_octave_continuum";
 ##
 ##  Quasidensity filename 
-global qdensity_filename = "wfc_rho";
+global qdensity_filename = "wfc_rho_symm_WS";
 ##
 ##
 if ( iprint >= 1 )
@@ -199,6 +198,7 @@ endif
 pseudodensity_symm_states_Numerov_symm_pot_1D_tise;
 ##
 ##
+keyboard()
 ##
 ##  
 ## Response function dB/dE computed with continuum states

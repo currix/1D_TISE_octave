@@ -169,12 +169,6 @@ continuum_states_Numerov_gen_pot_1D_tise;
 ##
 ## Test sum rules
 ##
-## Total Strength
-##
-global iSum_Rules_save = 1;
-##
-## Continuum states
-wf_filename = "wf_octave_continuum_gen_Morse";
 ##
 if ( iprint >= 1 )
   disp("");
@@ -184,12 +178,28 @@ if ( iprint >= 1 )
   disp("");
 endif
 ##
+##
+## Total Strength
+##
+global iSum_Rules_save = 1;
+##
+## Continuum states
+wf_filename = "wf_octave_continuum_gen_Morse";
+##
 bound_states_sum_rules_Numerov_gen_pot_1D_tise;
 ##
 ##
 ##
 ## Response function dB/dE computed with continuum states
 ##
+##
+if ( iprint >= 1 )
+  disp(" ");
+  disp("####################################################################");
+  disp("############### Response Function (continuum) ######################");
+  disp("####################################################################");
+  disp(" ");
+endif
 global i_E = 1; ## 1 -> E1  :: 2 -> E2
 ##
 global isave_dBdE = 1;
@@ -201,12 +211,27 @@ wf_filename = "wf_octave_continuum_gen_Morse";
 global dBdE_filename = "response_function_continuum_gen_Morse";
 ##
 ##
+dBdE_pure_cont_gen_states_Numerov_gen_pot_1D_tise;
+##
+## Pseudodensity calculation
+##
+##
 if ( iprint >= 1 )
   disp(" ");
   disp("####################################################################");
-  disp("############### Response Function (continuum) ######################");
+  disp("##################### Quasidensity matrix ##########################");
   disp("####################################################################");
   disp(" ");
 endif
 ##
-dBdE_pure_cont_gen_states_Numerov_gen_pot_1D_tise;
+##
+## Save density function
+global idensity_save = 1;
+##
+##  Continuum Eigenstates filenames 
+wf_filename = "wf_octave_continuum_gen_Morse";
+##
+##  Quasidensity filename 
+global qdensity_filename = "wfc_rho_gen_Morse";
+##
+pseudodensity_gen_states_Numerov_gen_pot_1D_tise;
