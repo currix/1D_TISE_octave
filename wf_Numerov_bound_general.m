@@ -110,7 +110,7 @@ function wf = wf_Numerov_bound_general(e0)
   ##
   ##
   ## Make equal derivatives at the matching point
-  y_right = y_right .* (wpfl/wpfr)
+  y_right = y_right .* (wpfl/wpfr);
   ## Unnormalized WF
   wf_unnor = [y_left(1:match_p), y_right(match_p+1:npoints)]; 
   ##

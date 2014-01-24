@@ -9,7 +9,7 @@
 ##
 ##
 ## Verbosity flag
-global iprint = 0;
+global iprint = 1;
 ##
 ##
 ## Physical constants
@@ -54,8 +54,8 @@ global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ## Define global variables characterizing the 1D potential
 ##
 ## Woods-Saxon Potential parameters
-global V_pt = 61.25; # Potential Depth (MeV)
-global a_pt = 2.09266; # Potential Diffusivity (fm)
+global V_pt = 50.0; # Potential Depth (MeV)
+global a_pt = 2.0; # Potential Diffusivity (fm)
 ##
 ## Potential values
 global vpot =  poeschl_teller_1D(xgrid);
@@ -75,7 +75,7 @@ endif
 ## Matrix diagonalization states
 global eigenvectors_file = "ho_eigenvectors_N120.dat";
 global dim_N = 120;
-global bound_states = 4;
+global bound_states = 1;
 global pseudo_states = dim_N - bound_states;
 ##
 ##

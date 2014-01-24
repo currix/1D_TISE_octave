@@ -20,9 +20,9 @@ global hsqoamu = 41.4713768; # MeV fm^2
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid
-global xmin = -35; # (fm)
-global xmax = 35;  # (fm)
-global npoints = 1003; 
+global xmin = -30; # (fm)
+global xmax = 30;  # (fm)
+global npoints = 1005; 
 global xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npoints points (fm)
 global x_step = (xmax-xmin)/(npoints-1); # (fm)
 ##
@@ -38,9 +38,9 @@ endif
 ## 
 ##
 ## Momentum grid (fm-1)
-global k_min = 0.025; # fm-1
-global k_max = 2.5; # fm-1
-global n_k_points = 100;
+global k_min = 0.02; # fm-1
+global k_max = 3.0; # fm-1
+global n_k_points = 150;
 global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
 global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ##
@@ -74,7 +74,7 @@ endif
 ##
 ##
 ## Matrix diagonalization states
-global eigenvectors_file = "ho_eigenvectors_N120.dat";
+global eigenvectors_file = "ho_eigenvectors_N120_wsaxon.dat";
 global dim_N = 120;
 global bound_states = 4;
 global pseudo_states = dim_N - bound_states;
@@ -160,7 +160,7 @@ global isave_dBdE = 1;
 wf_filename = "wf_octave_continuum";
 ##
 ## Response function filename
-global dBdE_filename = "response_function_continuum";
+global dBdE_filename = "response_function_continuum_symm_WS";
 ##
 ##
 if ( iprint >= 1 )
@@ -173,6 +173,7 @@ endif
 ##
 dBdE_pure_cont_symm_states_Numerov_symm_pot_1D_tise;
 ##
+keyboard()
 ##
 ## Pseudodensity calculation
 ##
@@ -212,7 +213,7 @@ i_E = 1; ## 1 -> E1  :: 2 -> E2
 qdensity_filename = "wfc_rho";
 ##
 ## Read Pseudostates transition moment from Fortran code
-global response_function_pseudostate_file = "ho_E2_TM_N120_1.dat";
+global response_function_pseudostate_file = "wsaxon_ho_E2_TM_N120_1.dat";
 ##
 ##
 if ( iprint >= 1 )

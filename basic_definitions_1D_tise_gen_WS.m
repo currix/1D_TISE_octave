@@ -9,7 +9,7 @@
 ##
 ##
 ## Verbosity flag
-global iprint = 1;
+global iprint = 0;
 ##
 ## graphics_toolkit("fltk")
 ##
@@ -21,8 +21,8 @@ global hsqoamu = 41.4713768; # MeV fm^2
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid
-global xmin = -20; # (fm)
-global xmax = 20;  # (fm)
+global xmin = -45; # (fm)
+global xmax = 45;  # (fm)
 global npoints = 1005; 
 global xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npoints points (fm)
 global x_step = (xmax-xmin)/(npoints-1); # (fm)
@@ -39,9 +39,9 @@ endif
 ## 
 ##
 ## Momentum grid (fm-1)
-global k_min = 0.025; # fm-1
-global k_max = 2.5; # fm-1
-global n_k_points = 100;
+global k_min = 0.02; # fm-1
+global k_max = 3.0; # fm-1
+global n_k_points = 150;
 global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
 global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ##

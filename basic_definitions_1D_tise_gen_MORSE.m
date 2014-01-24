@@ -115,10 +115,17 @@ endif
 ##
 ## Continuum Eigenstates
 ##
+if ( iprint >= 1 )
+  disp("");
+  disp("####################################################################");
+  disp("###################  Continuum states ##############################");
+  disp("####################################################################");
+  disp("");
+endif
 ##
 ## Momentum grid (fm-1)
-global k_min = 0.01; # fm-1
-global k_max = 15; # fm-1
+global k_min = 0.02; # fm-1
+global k_max = 3; # fm-1
 global n_k_points = 500;
 global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
 global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
@@ -128,17 +135,10 @@ global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ##global n_E_points = 150;
 ##global E_values = linspace(E_min, E_max, n_E_points); ## Vector with energy values
 ##global k_values = sqrt((2*red_mass*amu).*E_values)/hbarc; ## Vector with energy values
-if ( iprint >= 1 )
-  disp("");
-  disp("####################################################################");
-  disp("###################  Continuum states ##############################");
-  disp("####################################################################");
-  disp("");
-endif
 ##
 ## Spatial grid for bound state calculation
-xmin = -40; # (fm)
-xmax = 40;  # (fm)
+xmin = -30; # (fm)
+xmax = 30;  # (fm)
 npoints = 1503; 
 xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npoints points (fm)
 x_step = (xmax-xmin)/(npoints-1); # (fm)
@@ -186,3 +186,27 @@ endif
 ##
 bound_states_sum_rules_Numerov_gen_pot_1D_tise;
 ##
+##
+##
+## Response function dB/dE computed with continuum states
+##
+global i_E = 1; ## 1 -> E1  :: 2 -> E2
+##
+global isave_dBdE = 1;
+##
+## Continuum symmetrized states
+wf_filename = "wf_octave_continuum_gen_Morse";
+##
+## Response function filename
+global dBdE_filename = "response_function_continuum_gen_Morse";
+##
+##
+if ( iprint >= 1 )
+  disp(" ");
+  disp("####################################################################");
+  disp("############### Response Function (continuum) ######################");
+  disp("####################################################################");
+  disp(" ");
+endif
+##
+dBdE_pure_cont_gen_states_Numerov_gen_pot_1D_tise;
