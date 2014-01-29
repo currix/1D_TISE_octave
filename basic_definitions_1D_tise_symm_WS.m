@@ -197,23 +197,20 @@ endif
 ##
 pseudodensity_symm_states_Numerov_symm_pot_1D_tise;
 ##
-##
-keyboard()
-##
 ##  
 ## Response function dB/dE computed with continuum states
 ##
 global isave_pseudo_dBde = 1;
 ## Save dBdE filenames
-global dBdE_pseudo_filename = "dBde_E1_rho_ISQW.dat";
+global dBdE_pseudo_filename = "dBde_E1_rho_ho_N120_symm_WS.dat";
 ##
 i_E = 1; ## 1 -> E1  :: 2 -> E2
 ##
 ##  Quasidensity filename 
-qdensity_filename = "wfc_rho";
-##
+qdensity_filename = "wfc_rho_symm_WS";
+## 
 ## Read Pseudostates transition moment from Fortran code
-global response_function_pseudostate_file = "wsaxon_ho_E2_TM_N120_1.dat";
+global response_function_pseudostate_file = "wsaxon_ho_E1_TM_N120.dat";
 ##
 ##
 if ( iprint >= 1 )
@@ -226,6 +223,9 @@ endif
 ##
 dBdE_pseudostates_symm_states_Numerov_symm_pot_1D_tise
 ##
+##
+##
+keyboard()
 ##
 ##  
 ## Bins computed by the average method
