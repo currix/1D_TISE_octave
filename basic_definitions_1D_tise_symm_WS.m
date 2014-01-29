@@ -20,8 +20,8 @@ global hsqoamu = 41.4713768; # MeV fm^2
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid
-global xmin = -45; # (fm)
-global xmax = 45;  # (fm)
+global xmin = -90; # (fm)
+global xmax = 90;  # (fm)
 global npoints = 1005; 
 global xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npoints points (fm)
 global x_step = (xmax-xmin)/(npoints-1); # (fm)
@@ -40,7 +40,7 @@ endif
 ## Momentum grid (fm-1)
 global k_min = 0.02; # fm-1
 global k_max = 3.0; # fm-1
-global n_k_points = 150;
+global n_k_points = 200;
 global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
 global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ##
@@ -54,7 +54,7 @@ global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ## Define global variables characterizing the 1D potential
 ##
 ## Woods-Saxon Potential parameters
-global V_ws = 50; # Potential Depth (MeV)
+global V_ws = 45.0; # Potential Depth (MeV)
 global R_ws = 3.4; # Potential Radius (fm)
 global a_ws = 0.5; # Potential Diffusivity (fm)
 ##
@@ -62,7 +62,7 @@ global a_ws = 0.5; # Potential Diffusivity (fm)
 global vpot =  woods_saxon_1D(xgrid);
 ##
 ## Match Point (jeje, bound states calculation)
-global match_p = 450;
+global match_p = 490;
 ##
 ## Output
 if ( iprint >= 1 )
@@ -74,8 +74,8 @@ endif
 ##
 ##
 ## Matrix diagonalization states
-global eigenvectors_file = "ho_eigenvectors_N120_wsaxon.dat";
-global dim_N = 120;
+global eigenvectors_file = "ho_eigenvectors_N200_wsaxon_HO.dat";
+global dim_N = 200;
 global bound_states = 4;
 global pseudo_states = dim_N - bound_states;
 ##
@@ -202,7 +202,7 @@ pseudodensity_symm_states_Numerov_symm_pot_1D_tise;
 ##
 global isave_pseudo_dBde = 1;
 ## Save dBdE filenames
-global dBdE_pseudo_filename = "dBde_E1_rho_ho_N120_symm_WS.dat";
+global dBdE_pseudo_filename = "dBde_E1_rho_ho_N200_symm_WS.dat";
 ##
 i_E = 1; ## 1 -> E1  :: 2 -> E2
 ##
@@ -210,7 +210,7 @@ i_E = 1; ## 1 -> E1  :: 2 -> E2
 qdensity_filename = "wfc_rho_symm_WS";
 ## 
 ## Read Pseudostates transition moment from Fortran code
-global response_function_pseudostate_file = "wsaxon_ho_E1_TM_N120.dat";
+global response_function_pseudostate_file = "wsaxon_ho_E1_TM_N200.dat";
 ##
 ##
 if ( iprint >= 1 )
