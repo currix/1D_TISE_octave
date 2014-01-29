@@ -70,37 +70,57 @@ clear savemat_rho;
 ##
 ## Read Pseudostates transition moment from Fortran code
 ##
-## if (i_E == 1) 
 global response_function_pseudostate_file;
 E_pseudo_TM = load(response_function_pseudostate_file); ## 
-## else
-##  E_pseudo_TM = load("isqw_E2_TM_N150_1.dat"); ## E2 electric quadrupole
-## endif
 ##
 energies_pseudo = E_pseudo_TM(bound_states+1:dim_N,1); # Remove bound state contribution 
-E_pseudo_TM = E_pseudo_TM(bound_states+1:dim_N,2); # Remove bound state contribution 
+E_pseudo_TM = E_pseudo_TM(bound_states+1:dim_N,2:bound_states+1); # Remove bound state contribution 
 ##
+####################################################################
+##
+## Save data
+##
+global dBdE_pseudo_filename;
+##
+if (isave_pseudo_dBde == 1)
+  ## density matrix
+  filename = sprintf(dBdE_pseudo_filename);
+  ##
+  savemat = energies;
+  ##
+endif
+
 ####################################################################
 ## k definition
 global k_values;
 ####################################################################
 factor = (red_mass*amu/(8*(pi**3)*hbarc*hbarc))*k_values;
-dBEde = factor.*abs(transpose(E_pseudo_TM)*rho_ps).**2;
+##
+for i_state = 1:bound_states
+  ##
+  dBEde = factor .* abs( transpose( E_pseudo_TM(:,i_state) ) * rho_ps ).**2;
+  ##
+  ## Save data
+  if (isave_pseudo_dBde == 1)
+    savemat = [savemat; dBEde];
+    ##
+  endif
+  ##
+endfor
 ##
 if (iprint == 1) 
   figure(1)
   plot(energies, dBEde)
 endif
 ##
+## Save data
+##
 if (isave_pseudo_dBde == 1)
   ## density matrix
-  ##  if (i_E == 1)
-  filename = sprintf("dBde_E1_rho_ISQW_Moschini.dat");
-  ##  else
-  ##  endif
-  ##
-  savemat = transpose([energies; dBEde]);
+  savemat = transpose(savemat);
   ##
   save(filename,"savemat");
   ##
 endif
+##
+## clear savemat;
