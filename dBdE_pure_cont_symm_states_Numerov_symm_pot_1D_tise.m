@@ -85,6 +85,7 @@ if (i_E == 1) # Electric dipole : x matrix element
   endif
   ##
   factor = (red_mass*amu/(8*(pi**3)*hbarc*hbarc))*k_values;
+  ##factor = 1;
   ##
   for index = 1:bound_states
     ## 
@@ -93,9 +94,11 @@ if (i_E == 1) # Electric dipole : x matrix element
       ## Gerade contribution
       integrand_E1 = transpose(wf_bound(:,index)).*xgrid.*wfc_symm(index_k+1,:);
       f_symm = factor(index_k)*abs(trapz(xgrid, integrand_E1))**2;
+      ##f_symm = abs(trapz(xgrid, integrand_E1))**2;
       ## Ungerade contribution
       integrand_E1 = transpose(wf_bound(:,index)).*xgrid.*wfc_asymm(index_k+1,:);
       f_asymm = factor(index_k)*abs(trapz(xgrid, integrand_E1))**2;
+      ##f_asymm = abs(trapz(xgrid, integrand_E1))**2;
       ##
       dBde_E1(index_k) = f_symm + f_asymm;
       ##
