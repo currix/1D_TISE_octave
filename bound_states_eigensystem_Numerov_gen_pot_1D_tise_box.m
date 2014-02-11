@@ -20,6 +20,8 @@ global iprint;
 ## Save wave functions
 global iwf_bound_save;
 global wf_filename;
+global en_filename;
+
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid (Rigid walls at xmin and xmax)
@@ -196,6 +198,8 @@ endwhile
 disp("Bound state energies");
 printf(" %15.8e\n ", eigenvalues);
 ##########################################################
+filename = sprintf("%s.dat", en_filename);
+save(filename,"eigenvalues");
 ##########################################################
 filename = sprintf("%s.dat", wf_filename);
 savemat_wfb = transpose(savemat_wfb);
