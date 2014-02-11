@@ -9,7 +9,7 @@
 ##
 ##
 ## Verbosity flag
-global iprint = 1; 
+global iprint = 1;  
 ##
 ## graphics_toolkit("fltk")
 ##
@@ -46,10 +46,10 @@ if ( iprint >= 1 )
 endif
 ##
 ## Matrix diagonalization states
-global eigenvectors_file = "isqw_eigenvectors_N150_WSaxon_Moschini.dat";
-global dim_N = 150;
-global bound_states = 3;
-global pseudo_states = dim_N - bound_states;
+##global eigenvectors_file = "isqw_eigenvectors_N150_WSaxon_Moschini.dat";
+##global dim_N = 150;
+##global bound_states = 3;
+##global pseudo_states = dim_N - bound_states;
 ####
 #################################################################
 #################################################### Calculations
@@ -81,7 +81,7 @@ endif
 global vpot =  woods_saxon_1D(xgrid);
 ##
 ## max energy value for bound states
-global e_threshold = 10; ## MeV
+global e_threshold = 21; ## MeV
 ## Match Point (jeje, bound states calculation)
 global match_p = 461;
 ## Output
@@ -99,16 +99,14 @@ endif
 global iwf_bound_save = 1;
 ##
 ##  Bound Eigenstates filenames wf_filename_1.dat wf_filename_2.dat ... 
-global wf_filename = "wf_octave_bound_WS_Moschini_box";
+global wf_filename = "wf_octave_WS_Moschini_box";
+global en_filename = "en_octave_WS_Moschini_box";
 ## 
 bound_states_eigensystem_Numerov_gen_pot_1D_tise_box
 ##
 if ( iprint >= 1 )
   disp(" ");
 endif
-
-keyboard
-
 ###################################################################################
 ##
 ## Test sum rules
@@ -127,14 +125,14 @@ endif
 ##
 global iSum_Rules_save = 1;
 ##
-## Continuum states
-wf_filename = "wf_octave_continuum_gen_Morse";
+## Box states
+wf_filename = "wf_octave_WS_Moschini_box";
 ##
-bound_states_sum_rules_Numerov_gen_pot_1D_tise;
+bound_states_sum_rules_Numerov_gen_pot_1D_tise_box;
 ##
 ##
 ##
-## Response function dB/dE computed with continuum states
+## Response function dB/dE computed with box states
 ##
 ##
 if ( iprint >= 1 )
@@ -147,40 +145,19 @@ endif
 ##
 global isave_dBdE = 1;
 ##
-## Continuum symmetrized states
-wf_filename = "wf_octave_continuum_gen_Morse";
+## Box states
+wf_filename = "wf_octave_WS_Moschini_box";
+en_filename = "en_octave_WS_Moschini_box";
 ##
 ## Response function filename
-global dBdE_filename = "response_function_continuum_gen_Morse";
+global dBdE_filename = "response_function_box_gen_WS_Mosch";
 ##
 ##
 global i_E = 1; ## 1 -> E1  :: 2 -> E2
 ##
-dBdE_pure_cont_gen_states_Numerov_gen_pot_1D_tise;
+dBdE_box_cont_gen_states_Numerov_gen_pot_1D_tise;
 ##
 i_E = 2; ## 1 -> E1  :: 2 -> E2
 ##
-dBdE_pure_cont_gen_states_Numerov_gen_pot_1D_tise;
+dBdE_box_cont_gen_states_Numerov_gen_pot_1D_tise;
 ##
-## Pseudodensity calculation
-##
-##
-if ( iprint >= 1 )
-  disp(" ");
-  disp("####################################################################");
-  disp("##################### Quasidensity matrix ##########################");
-  disp("####################################################################");
-  disp(" ");
-endif
-##
-##
-## Save density function
-global idensity_save = 1;
-##
-##  Continuum Eigenstates filenames 
-wf_filename = "wf_octave_continuum_gen_Morse";
-##
-##  Quasidensity filename 
-global qdensity_filename = "wfc_rho_gen_Morse";
-##
-pseudodensity_gen_states_Numerov_gen_pot_1D_tise;
