@@ -198,11 +198,14 @@ endwhile
 disp("Bound state energies");
 printf(" %15.8e\n ", eigenvalues);
 ##########################################################
-filename = sprintf("%s.dat", en_filename);
-save(filename,"eigenvalues");
-##########################################################
-filename = sprintf("%s.dat", wf_filename);
-savemat_wfb = transpose(savemat_wfb);
-save(filename,"savemat_wfb");
+## Save energies and wave functions
+if (iwf_bound_save == 1)
+  filename = sprintf("%s.dat", en_filename);
+  save(filename,"eigenvalues");
+  ####
+  filename = sprintf("%s.dat", wf_filename);
+  savemat_wfb = transpose(savemat_wfb);
+  save(filename,"savemat_wfb");
+endif
 ##########################################################
 ##########################################################
