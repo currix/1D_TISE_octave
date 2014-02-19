@@ -41,15 +41,13 @@ global red_mass; # Reduced mass in amu
 ## Read Bound States and Pseudostates
 ##
 global eigenv_file;
-eigenv_file 
 all_states = load(eigenv_file); 
 ##
-global dim_N;
 global bound_states;
-global pseudo_states;
+global pseudostates;
 ##
 wf_bound = all_states(:, 2:bound_states+1);
-wf_pseudostates = all_states(:,bound_states+2:dim_N+1);
+wf_pseudostates = all_states(:,bound_states+2:bound_states+1+pseudostates);
 ##
 clear all_states;
 ##
@@ -81,11 +79,11 @@ clear savemat;
 ####################################################################
 if (idensity_save == 1)
   ## initialize pseudodensity matrix
-  savemat_rho = [E_values]; # pseudodensity matrix <\psi_j|\phi_k> 
+  savemat_rho = [k_values; E_values]; # pseudodensity matrix <\psi_j|\phi_k> 
   ##
-  savemat_rho2 = [E_values]; #  |<\psi_j|\phi_k>|^2 
+  savemat_rho2 = [k_values; E_values]; #  |<\psi_j|\phi_k>|^2 
   ##
-  savemat_tot_rho = [E_values]; # \sum_j |<\psi_j|\phi_k>|^2 
+  savemat_tot_rho = [k_values; E_values]; # \sum_j |<\psi_j|\phi_k>|^2 
   ##
 endif
 ####################################################################
@@ -96,7 +94,7 @@ endif
 tot_rho = zeros(1,n_k_points); # pseudodensity matrix <\psi_j|\phi_k>_g + <\psi_j|\phi_k>_u 
 tot_rho2 = zeros(1,n_k_points);# |<\psi_j|\phi_k>_g + <\psi_j|\phi_k>_u|^2
 ##
-for index_pseudo = 1:pseudo_states  # loop on pseudostates
+for index_pseudo = 1:pseudostates  # loop on pseudostates
   ##
   if (iprint == 1)
     printf("Calculating density for pseudostate # %i ... ",index_pseudo);
