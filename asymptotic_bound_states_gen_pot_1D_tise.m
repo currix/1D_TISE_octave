@@ -97,7 +97,7 @@ clear wfbound
 ##
 if (iwf_bound_save == 1)
   ##
-  filename = sprintf("%s_asympt.dat", wf_filename);
+  filename = sprintf("%s_asympt.dat", wfb_filename);
   save(filename,"wf_bound");
 endif
 #########################################################################
