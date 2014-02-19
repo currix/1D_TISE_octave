@@ -40,7 +40,9 @@ global red_mass; # Reduced mass in amu
 ###########################################################################
 ## Read Bound States and Pseudostates
 ##
-all_states = load(eigenvectors_file); 
+global eigenv_file;
+eigenv_file 
+all_states = load(eigenv_file); 
 ##
 global dim_N;
 global bound_states;
@@ -52,7 +54,7 @@ wf_pseudostates = all_states(:,bound_states+2:dim_N+1);
 clear all_states;
 ##
 #########################################################################
-## Read Continuum States (gerade/ungerade)
+## Read Continuum States 
 ##
 ## k values (fm-1)
 global n_k_points;

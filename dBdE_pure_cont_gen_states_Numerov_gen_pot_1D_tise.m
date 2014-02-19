@@ -18,8 +18,8 @@
 global iprint;
 ## Compute E1 or E2
 global i_E; ## 1 -> E1  :: 2 -> E2
-## Save dBdE results
 ##
+## Save dBdE results
 global isave_dBdE;
 ##
 global dBdE_filename;
@@ -33,8 +33,6 @@ global amu;   # MeV / c^2
 ##
 ## Spatial grid
 global xgrid; # Interval comprising ends with npoints points (fm)
-## 
-## Define global variables characterizing the 1D System
 ##
 global red_mass; # Reduced mass in amu
 ##
@@ -46,18 +44,31 @@ global side_wf;
 ###########################################################################
 ## Read Bound States and Pseudostates
 ##
+global wfb_fortran;
 global eigenvectors_file;
-##
-all_states = load(eigenvectors_file); # Bound states and pseudostates from Fortran codes 
+global wfb_filename;
 ##
 global dim_N; # N value
 global bound_states; # Number of bound states
 global pseudo_states; # Number of pseudostates
 ##
-wf_bound = all_states(:, 2:bound_states+1); # Bound states wave functions
-## wf_pseudostates = all_states(:,bound_states+2:dim_N+1); # Pseudostate wave functions (not needed)
-clear all_states;
+global wf_bound;
 ##
+step = 1;
+##
+if (wfb_fortran == 1) ## Not checked. Needs same xgrid as the continuum case.
+  ##
+  ## Bound states from Fortran code
+  ##
+  all_states = load(eigenvectors_file); # Bound states and pseudostates from Fortran code 
+  ##
+  wf_bound = all_states(:, 2:bound_states+1); # Bound states wave functions
+  xgrid_bound = all_states(:, 1);
+  ##
+  clear all_states;
+  ##
+  step = 0;
+endif
 #########################################################################
 #########################################################################
 ## Read Continuum States (computed with a Numerov approach and symmetrised in gerade/ungerade)
@@ -97,7 +108,9 @@ if (i_E == 1) # Electric dipole : x matrix element
     ## 
     for index_k = 1:n_k_points
       ##
-      integrand_E1 = transpose(wf_bound(:,index)).*xgrid.*wfc(index_k+1,:);
+      ##                            First column is the xgrid
+      ##                                        V 
+      integrand_E1 = transpose(wf_bound(:,index + step)).*xgrid.*wfc(index_k+1,:);
       dBde_E1(index_k) = factor(index_k)*abs(trapz(xgrid, integrand_E1))**2;
       ##
       if ( iprint > 1 )
@@ -142,7 +155,9 @@ if (i_E == 2)
   for index = 1:bound_states 
     for index_k = 1:n_k_points
       ##
-      integrand_E2 = transpose(wf_bound(:,index)).*xgrid.*xgrid.*wfc(index_k+1,:);
+      ##                            First column is the xgrid
+      ##                                        V 
+      integrand_E2 = transpose(wf_bound(:,index + step)).*xgrid.*xgrid.*wfc(index_k+1,:);
       ##
       dBde_E2(index_k) = factor(index_k)*abs(trapz(xgrid, integrand_E2))**2;
       ##

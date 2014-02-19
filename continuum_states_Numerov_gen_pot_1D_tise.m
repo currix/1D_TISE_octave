@@ -91,14 +91,14 @@ endif
 if (side_wf == 1) ## Needs to do the other case... 
   ## Limit xgrid to values with potential values - energy values > pot_limit
   for index = [1:npoints]
-    if (morse_1D(xgrid(index))-energy < pot_limit) 
+    if (morse_1D(xgrid(index)) - E_values(end) < pot_limit) 
       index_limit = index;
       break
     endif
   endfor
   ##
   if ( iprint >= 1 )
-    printf("index %i, xval %f, potval %f", index_limit, xgrid(index_limit), vpot(index_limit))
+    printf("index %i, xval %f, potval %f\n", index_limit, xgrid(index_limit), vpot(index_limit))
   endif
   ##
   ## Redefine xgrid, vpot, and npoints

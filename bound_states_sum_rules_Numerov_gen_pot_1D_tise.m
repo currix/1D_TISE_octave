@@ -32,6 +32,8 @@ global bound_states_file;
 ## Left (0) or right (1) incoming continuum wave functions
 global side_wf;
 ##
+## Bound states array
+global wf_bound 
 ##
 ###########################################################################
 ## Define global variables characterizing the 1D system
@@ -45,15 +47,15 @@ global red_mass; # Reduced mass in amu
 ##
 ## Read Bound states
 ##
-all_states = load(eigenvectors_file); 
+#### all_states = load(eigenvectors_file); 
 ##
-global dim_N;
-global bound_states;
-global pseudo_states;
+####global dim_N;
+####global bound_states;
+####global pseudo_states;
 ##
-wf_bound = all_states(:, 2:bound_states+1); ## Leave out the x values column
+####wf_bound = all_states(:, 2:bound_states+1); ## Leave out the x values column
 ##
-clear all_states;
+####clear all_states;
 ##
 #########################################################################
 #########################################################################
@@ -87,8 +89,9 @@ clear savemat;
 ##
 ##  Compute <\psi_i|x^2|psi_i> for each bound state
 for index = 1:bound_states 
-  ##
-  integrand = (xgrid .* transpose(wf_bound(:,index)) ).**2;
+  ##                                     First column is the xgrid
+  ##                                               V 
+  integrand = (xgrid .* transpose(wf_bound(:,index + 1)) ).**2; 
   expected_val_x2(index) = trapz(xgrid, integrand);
   ##
   printf("x^2 expected value %i-th bound state = %f\n", index-1, expected_val_x2(index));
@@ -112,7 +115,7 @@ for index_bound_i = 1:bound_states ##  Bound states loop 1
   ##
   for index_bound_j = 1:bound_states ## Bound states loop 2 
     ##
-    integrand = xgrid .* transpose(wf_bound(:,index_bound_i)) .* transpose(wf_bound(:,index_bound_j)); 
+    integrand = xgrid .* transpose(wf_bound(:,index_bound_i + 1 )) .* transpose(wf_bound(:,index_bound_j + 1)); 
     int_val = trapz(xgrid, integrand)**2; ## <\psi_i|x|\psi_j>
     ##
     sum_rule_bound += int_val;
@@ -130,7 +133,7 @@ for index_bound_i = 1:bound_states ##  Bound states loop 1
     ##  Compute \int_k <\psi_i|x|\phi_k>_g g_<\phi_k|x|psi_i> + <\psi_i|x|\phi_k>_u u_<\phi_k|x|psi_i> ] for each bound state
     ##
     ## continuum contribution
-    integrand = xgrid .* transpose(wf_bound(:,index_bound_i)) .* wfc(1+index_cont,:); # psi_i * x * phi_gerade
+    integrand = xgrid .* transpose(wf_bound(:,index_bound_i + 1)) .* wfc(1+index_cont,:); # psi_i * x * phi_gerade
     int_val_cont = abs(trapz(xgrid, integrand))**2;
     ##
     continuum_integrand = [continuum_integrand, int_val_cont];

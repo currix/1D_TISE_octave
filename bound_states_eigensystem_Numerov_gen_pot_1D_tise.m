@@ -20,6 +20,7 @@ global iprint;
 ## Save wave functions
 global iwf_bound_save;
 global wf_filename;
+global en_filename;
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid
@@ -44,6 +45,10 @@ if ( iprint >= 1 )
   disp("Computing bound states energies and wavefunctions.");
 endif
 ###########################################################################
+if (iwf_bound_save == 1)
+  ## Initialize Wave Function Matrix
+  savemat = [xgrid];
+endif
 ###########################################################################
 ##
 ## Plot Potential
@@ -160,10 +165,8 @@ while (energy < e_threshold)
           nodes_num++;
           wflr1 = wdiff_Numerov_lr_gen(energy + delta_e); # Recompute wflr1 with new parity
           if (iwf_bound_save == 1)
-	    ## save Wave Function
-	    savemat = [xgrid; wf]';
-	    filename = sprintf("%s_%i.dat", wf_filename, nodes_num);
-	    save(filename,"savemat");
+	    ## Add Wave Function to Matrix to be Saved
+	    savemat = [savemat; wf];
           endif
           ##
 	endif
@@ -185,6 +188,17 @@ while (energy < e_threshold)
   wflr0 = wflr1;
   ##
 endwhile
+##
+if (iwf_bound_save == 1)
+  ##
+  filename = sprintf("%s.dat", en_filename);
+  save(filename,"eigenvalues");
+  ####
+  savemat = transpose(savemat);
+  filename = sprintf("%s.dat", wf_filename);
+  save(filename,"savemat");
+endif
+##
 ##
 disp("Bound state energies");
 printf(" %15.8e\n ", eigenvalues);
