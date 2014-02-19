@@ -185,9 +185,9 @@ while (energy < e_threshold)
       endif
       ##
       ##
-    endif
+    endif 
     ##
-  endif
+  endif 
   ##
   ##
   energy += delta_e;
