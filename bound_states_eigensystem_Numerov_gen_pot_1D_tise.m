@@ -80,8 +80,8 @@ global norm_val;
 ##
 global right_val;
 ########################################################################
-tolerance_wf = 10.0;
-tolerance_wfp = 10.0;
+tolerance_wf = 0.05;
+tolerance_wfp = 1.0;
 ########################################################################
 ## e min
 energy = e0;
@@ -113,7 +113,7 @@ while (energy < e_threshold)
     eigenval = fzero("wdiff_Numerov_lr_gen", [energy,energy+delta_e], optimset("TolX",tol_fzero));
     ##
     ## check and print results
-    if (abs(eigenval) > abs(energy) || abs(eigenval) < abs(energy + delta_e)) ## Check whether routine is out of the search interval
+    if (eigenval < energy || eigenval > energy + delta_e || eigenval > 0) ## Check whether routine is out of the search interval
       ##
       if ( iprint >= 1 )
         printf(" Wrong eigenvalue buddy... Keep on searching!\n")
@@ -125,63 +125,66 @@ while (energy < e_threshold)
       right_val = 1;
       [wfl wfr wpfl wpfr] = w_Numerov_lr_general(eigenval);
       ##
+      ## Equate derivatives to one
+      wfl = wfl/wpfl; wfr = wfr/wpfr; wpfr = 1; wpfl = 1;
+      ##
       if ( iprint >= 1 )
         ##
         printf("Possible eigenvalue = %15.8e\n", eigenval);
         ##
-        printf("Matching data (I)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
+        printf("Matching data (Ia)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
+        printf("Matching data (IIa) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
         ##
       endif
       ##
-      if (sign(wpfl*wpfr) > 0)
-	## Derivatives with same sign. 
-	if ( iprint >= 1 )
-          ##
-          printf("Matching data (II) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
-          ##
-	endif
-	##
-	if (2*abs((wfl-wfr)/(wfl+wfr)) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## This needs justification 
-          ##
-          if (iprint >= 1) 
-            printf("%i-th eigenvalue found = %f\n", nodes_num, eigenval);
-          endif
-          ##
-          eigenvalues = [eigenvalues, eigenval];
-          ##
-          ## Build Wave Function
-	  norm_val = 1;
-	  right_val = 1;
-          wf = wf_Numerov_bound_general(eigenval);
-          ##
-          ##   Plot Wave Function
-          ## figure(2) ## for a new figure uncomment this
-          if (iprint > 0)
-	    hold on
-            scale = 5;
-            plot(xgrid, eigenval + scale*wf)    
-	  endif
-          ##
-          nodes_num++;
-          wflr1 = wdiff_Numerov_lr_gen(energy + delta_e); # Recompute wflr1 with new parity
-          if (iwf_bound_save == 1)
-	    ## Add Wave Function to Matrix to be Saved
-	    savemat = [savemat; wf];
-          endif
-          ##
-	endif
-	##
-      else
-	##
-	if (iprint >= 1) 
-          printf("Derivatives with different signs\n");
-	endif
-	##
+      ##
+      ## Build Wave Function
+      norm_val = 1;
+      right_val = 1;
+      wf = wf_Numerov_bound_general(eigenval);
+      ##
+      normalization = wf(match_p)/wfl;
+      wfl *= normalization;
+      wfr *= normalization;
+      ##
+      if ( iprint >= 1 )
+        ##
+        printf("Matching data (Ib)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
+        printf("Matching data (IIb) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
+        ##
       endif
       ##
-    endif
+      ## if (2*abs((wfl-wfr)/(wfl+wfr)) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## This needs justification 
+      if (abs(wfl-wfr) < tolerance_wf ) ## 
+        ##
+        if (iprint >= 1) 
+          printf("%i-th eigenvalue found = %f\n", nodes_num, eigenval);
+        endif
+        ##
+        eigenvalues = [eigenvalues, eigenval];
+        ##
+        ##
+        ##   Plot Wave Function
+        ## figure(2) ## for a new figure uncomment this
+        if (iprint > 0)
+	  hold on
+          scale = 5;
+          plot(xgrid, eigenval + scale*wf)    
+	endif
+        ##
+        nodes_num++;
+        wflr1 = wdiff_Numerov_lr_gen(energy + delta_e); # Recompute wflr1 with new parity
+        ##
+        if (iwf_bound_save == 1)
+	  ## Add Wave Function to Matrix to be Saved
+	  savemat = [savemat; wf];
+        endif
+        ##
+      endif 
+      ##
+    endif 
     ##
-  endif
+  endif 
   ##
   ##
   energy += delta_e;
