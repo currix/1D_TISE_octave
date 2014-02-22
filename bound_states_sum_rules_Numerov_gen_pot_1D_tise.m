@@ -26,8 +26,8 @@ global iprint;
 ## Save wave functions
 global iSum_Rules_save;
 ##
-## Bound states
-global bound_states_file;
+## Fortran bound states
+####global bound_states_file;
 ##
 ## Left (0) or right (1) incoming continuum wave functions
 global side_wf;
