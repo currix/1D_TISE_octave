@@ -71,7 +71,7 @@ if (wfb_fortran == 1) ## Not checked. Needs same xgrid as the continuum case.
 endif
 #########################################################################
 #########################################################################
-## Read Continuum States (computed with a Numerov approach and symmetrised in gerade/ungerade)
+## Read Continuum States computed with a Numerov approach 
 ## k values (fm-1)
 global n_k_points; # Number of k values
 global k_values; # vector with k values
