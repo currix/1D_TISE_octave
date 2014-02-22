@@ -9,7 +9,7 @@
 ##
 ##
 ## Verbosity flag
-global iprint = 0;
+global iprint = 2;
 ##
 ##
 ## Physical constants
@@ -27,7 +27,7 @@ global xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npo
 global x_step = (xmax-xmin)/(npoints-1); # (fm)
 ##
 ## Reduced mass
-global red_mass = 0.952 # Reduced mass in amu
+global red_mass = 0.975 # Reduced mass in amu
 ##
 ## Output
 if ( iprint >= 1 )
@@ -39,8 +39,8 @@ endif
 ##
 ## Momentum grid (fm-1)
 global k_min = 0.02; # fm-1
-global k_max = 3.0; # fm-1
-global n_k_points = 200;
+global k_max = 2.0; # fm-1
+global n_k_points = 150;
 global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
 global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ##
@@ -54,9 +54,9 @@ global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ## Define global variables characterizing the 1D potential
 ##
 ## Woods-Saxon Potential parameters
-global V_ws = 45.0; # Potential Depth (MeV)
-global R_ws = 3.4; # Potential Radius (fm)
-global a_ws = 0.5; # Potential Diffusivity (fm)
+global V_ws = 50.0; # Potential Depth (MeV)
+global R_ws = 2.0; # Potential Radius (fm)
+global a_ws = 0.4; # Potential Diffusivity (fm)
 ##
 ## Potential values
 global vpot =  woods_saxon_1D(xgrid);

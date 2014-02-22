@@ -108,7 +108,7 @@ endif
 ## Save bound states wave function
 global iwf_bound_save = 1;
 ##
-##  Bound Eigenstates filenames wf_filename_1.dat wf_filename_2.dat ... 
+##  Bound Eigenstates filenames 
 global wf_filename = "wf_octave_Morse_box";
 global en_filename = "en_octave_Morse_box";
 ### 

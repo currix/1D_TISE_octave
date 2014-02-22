@@ -178,6 +178,15 @@ continuum_states_Numerov_gen_pot_1D_tise;
 ##
 ## Complete bound states
 ##
+if ( iprint >= 1 )
+  disp("");
+  disp("####################################################################");
+  disp("############## Bound State Asymp. Behavior #########################");
+  disp("####################################################################");
+  disp("");
+endif
+##
+##
 ##  Bound Eigenstates filenames wf_filename.dat ... 
 global wfb_filename = "wf_octave_bound_Morse";
 global en_filename = "en_octave_bound_Morse";
@@ -250,7 +259,7 @@ dBdE_pure_cont_gen_states_Numerov_gen_pot_1D_tise;
 if ( iprint >= 1 )
   disp(" ");
   disp("####################################################################");
-  disp("##################### Quasidensity matrix ##########################");
+  disp("##################### Pseudodensity matrix ##########################");
   disp("####################################################################");
   disp(" ");
 endif
@@ -258,7 +267,6 @@ endif
 ##
 ## Save density function
 global idensity_save = 1;
-##
 ##
 ##  Quasidensity filename 
 global qdensity_filename = "wfc_rho_gen_Morse";
