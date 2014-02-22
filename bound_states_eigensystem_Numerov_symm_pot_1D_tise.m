@@ -21,6 +21,8 @@ global iprint;
 ## Save wave functions
 global iwf_bound_save;
 global wf_filename;
+global en_filename;
+##
 ##
 ## Define global variables characterizing the 1D system
 ## Spatial grid
@@ -45,6 +47,10 @@ if ( iprint == 1 )
   disp("Computing bound states energies and wavefunctions.");
 endif
 ###########################################################################
+if (iwf_bound_save == 1)
+  ## Initialize Wave Function Matrix
+  savemat = [xgrid];
+endif
 ###########################################################################
 ##
 ## Plot Potential
@@ -59,12 +65,12 @@ hold on
 ## Initial E value definition
 xmin_pot = 0.0; # location of the potential minimum. (fm)
 e0 =  min(vpot); # Initial E value : Vmin (MeV)
-delta_e = 0.5; # E grid increment (MeV)
+delta_e = 0.25; # E grid increment (MeV)
 ##
 eigenvalues = [];
 ##
 ## Tolerance applies to the fzero x (energy) convergence (MeV units)
-tol_fzero = 0.000001;
+tol_fzero = 1.0E-06;
 ##
 ## Number of nodes
 global nodes_num;
@@ -72,14 +78,16 @@ nodes_num = 0; ## g.s. -> zero nodes
 ##
 ## Normalization factor for wf reconstruction
 global norm_val;
+global right_val;
 norm_val = 1.0;
 ########################################################################
-tolerance_wf = 1.0;
+tolerance_wf = 0.05;
 tolerance_wfp = 1.0;
 ## e min
 energy = e0;
 ## max energy value for bound states
 e_threshold = 0; ## MeV
+########################################################################
 wflr0 = wdiff_Numerov_lr(energy);
 ##
 while (energy < e_threshold)
@@ -104,27 +112,49 @@ while (energy < e_threshold)
     eigenval = fzero("wdiff_Numerov_lr", [energy, energy+delta_e], optimset("TolX",tol_fzero));
     ##
     ## check and print results
-    ##
-    [wfl wfr wpfl wpfr] = w_Numerov_lr(eigenval);
-    ##
-    if ( iprint >= 1 )
+    if (eigenval < energy || eigenval > energy + delta_e || eigenval > 0) ## Check whether routine is out of the search interval
       ##
-      printf("Possible eigenvalue = %15.8e\n", eigenval);
+      if ( iprint >= 1 )
+        printf(" Wrong eigenvalue buddy... Keep on searching!\n")
+      endif
       ##
-      printf("Matching data (I)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
+    else
       ##
-    endif
-    ##
-    if (sign(wpfl*wpfr) > 0)
-      ## Derivatives with same sign. 
+      norm_val = 1;
+      right_val = 1;
+      [wfl wfr wpfl wpfr] = w_Numerov_lr(eigenval);
+      ##
+      ## Equate derivatives to one
+      wfl = wfl/wpfl; wfr = wfr/wpfr; wpfr = 1; wpfl = 1;
+      ##
       if ( iprint >= 1 )
         ##
-        printf("Matching data (II) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
+        printf("Possible eigenvalue = %15.8e\n", eigenval);
+        ##
+        printf("Matching data (Ia)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
+        printf("Matching data (IIa) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
         ##
       endif
       ##
       ##
-      if (2*abs((wfl-wfr)/(wfl+wfr)) < tolerance_wf && 2*abs((wpfl-wpfr)/(wpfl+wpfr)) < tolerance_wfp ) ## This needs justification 
+      ## Build Wave Function
+      norm_val = 1;
+      right_val = 1;
+      wf = wf_Numerov_bound(eigenval);
+      ##
+      normalization = wf(match_p)/wfl;
+      wfl *= normalization;
+      wfr *= normalization;
+      ##
+      ##
+      if ( iprint >= 1 )
+        ##
+        printf("Matching data (Ib)  %15.8e %15.8e %15.8e %15.8e\n",wfl,wfr,wpfl,wpfr)
+        printf("Matching data (IIb) %15.8e %15.8e %15.8e %15.8e\n",(wfl-wfr),2*abs((wfl-wfr)/(wfl+wfr)),wpfl-wpfr,2*abs((wpfl-wpfr)/(wpfl+wpfr)))
+        ##
+      endif
+      ##
+      if (abs(wfl-wfr) < tolerance_wf ) ## 
         ##
         if (iprint >= 1) 
           printf("%i-th eigenvalue found = %f\n", nodes_num, eigenval);
@@ -132,40 +162,44 @@ while (energy < e_threshold)
         ##
         eigenvalues = [eigenvalues, eigenval];
         ##
-        ## Build Wave Function
-        wf = wf_Numerov_bound(eigenval);
-        ##
         ##   Plot Wave Function
         ## figure(2) ## for a new figure uncomment this
-        hold on
-        scale = 5;
-        plot(xgrid, eigenval + scale*wf)    
+	if (iprint >= 0) 
+          hold on
+          scale = 5;
+          plot(xgrid, eigenval + scale*wf)    
+	endif
         ##
         nodes_num++;
         wflr1 = wdiff_Numerov_lr(energy + delta_e); # Recompute wflr1 with new parity
+	##
         if (iwf_bound_save == 1)
-	  ## save Wave Function
-	  savemat = [xgrid; wf]';
-	  filename = sprintf("%s_%i.dat", wf_filename, nodes_num);
-	  save(filename,"savemat");
+	  ## Add Wave Function to Matrix to be Saved
+	  savemat = [savemat; wf];
         endif
         ##
-      endif
-      ##
-    else
-      ##
-      if (iprint >= 1) 
-        printf("Derivatives with different signs\n");
       endif
       ##
     endif
     ##
   endif
   ##
+  ##
   energy += delta_e;
   wflr0 = wflr1;
   ##
 endwhile
+##
+if (iwf_bound_save == 1)
+  ##
+  filename = sprintf("%s.dat", en_filename);
+  save(filename,"eigenvalues");
+  ####
+  savemat = transpose(savemat);
+  filename = sprintf("%s.dat", wf_filename);
+  save(filename,"savemat");
+endif
+##
 ##
 disp("Bound state energies");
 printf(" %15.8e\n ", eigenvalues);
