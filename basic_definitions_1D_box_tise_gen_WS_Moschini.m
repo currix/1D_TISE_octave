@@ -48,7 +48,7 @@ endif
 ## Matrix diagonalization states
 ##global eigenvectors_file = "isqw_eigenvectors_N150_WSaxon_Moschini.dat";
 ##global dim_N = 150;
-##global bound_states = 3;
+global bound_states = 3;
 ##global pseudo_states = dim_N - bound_states;
 ####
 #################################################################
