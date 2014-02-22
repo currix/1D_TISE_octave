@@ -1,4 +1,4 @@
-## dBdE_pure_cont_symm_states_Numerov_1D_tise.m
+## dBdE_pure_cont_symm_states_Numerov_symm_1D_tise.m
 ##
 ## Compute dB/dE(E\lambda)(i->k) = \frac{\mu k}{(2\pi)^3\hbar^2} \times 
 ##                                 |<\fi_k|M(E\lambda)|\psi_i>|^2
