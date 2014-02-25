@@ -33,7 +33,6 @@ global wfb_filename;
 ##
 global dim_N; # N value
 global bound_states; # Number of bound states
-global pseudo_states; # Number of pseudostates
 ##
 ##
 if (wfb_fortran == 1) 
