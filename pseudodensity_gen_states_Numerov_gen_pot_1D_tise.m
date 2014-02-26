@@ -41,7 +41,13 @@ global red_mass; # Reduced mass in amu
 ## Read Bound States and Pseudostates
 ##
 global eigenv_file;
-all_states = load(eigenv_file); 
+##
+####all_states = load(eigenv_file); 
+##
+load(eigenv_file); 
+all_states = savemat_wfb;
+clear savemat_wfb;
+##
 ##
 global bound_states;
 global pseudostates;
@@ -92,7 +98,7 @@ endif
 ## rho_k(N,i)
 ##
 tot_rho = zeros(1,n_k_points); # pseudodensity matrix <\psi_j|\phi_k>_g + <\psi_j|\phi_k>_u 
-tot_rho2 = zeros(1,n_k_points);# |<\psi_j|\phi_k>_g + <\psi_j|\phi_k>_u|^2
+tot_rho2 = zeros(1,n_k_points);# |<\psi_j|\phi_k>|^2
 ##
 for index_pseudo = 1:pseudostates  # loop on pseudostates
   ##
