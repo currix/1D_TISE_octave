@@ -61,7 +61,7 @@ endif
 global k_values; ## Vector with k momentum values
 global E_values; ## Vector with E energy values
 ##
-if (iprint == 1)
+if (iprint > 1)
   disp("K_values");
   k_values ## k values
   disp("E_values");

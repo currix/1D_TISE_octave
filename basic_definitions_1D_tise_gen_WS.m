@@ -9,7 +9,7 @@
 ##
 ##
 ## Verbosity flag
-global iprint = 0;
+global iprint = 1;
 ##
 ## graphics_toolkit("fltk")
 ##
@@ -51,7 +51,7 @@ global bound_states = 3;
 #################################################### Calculations
 #################################################################
 ##
-## Numerov algorith to compute Bound eigenvalues and eigenstates
+## Numerov algorithm to compute bound eigenvalues and eigenstates
 ##
 ## 
 if ( iprint >= 1 )
@@ -107,9 +107,9 @@ endif
 ## Momentum grid (fm-1)
 global k_min = 0.02; # fm-1
 global k_max = 2.5; # fm-1
-global n_k_points = 80;
+global n_k_points = 150;
 global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
-global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
+global E_values = (k_values.*hbarc).^2/(2*red_mass*amu); ## Energy values (MeV)
 ##
 ## Energy grid (MeV) (uncomment next lines and comment the  k grid lines)
 ##global E_min = 0.1;  # MeV
@@ -122,8 +122,8 @@ global E_values = (k_values.*hbarc).^2/(2*red_mass*amu) ## Energy values (MeV)
 ## Spatial grid for continuum state calculation
 xmin_old = xmin;
 xmax_old = xmax;
-xmin = -120; # (fm)
-xmax = 120;  # (fm)
+xmin = -130; # (fm)
+xmax = 130;  # (fm)
 ##
 ## Extend the original grid to the left with the same step
 npoints_new = floor((xmin_old-xmin)/x_step + 1);
@@ -222,7 +222,7 @@ global wfb_fortran = 0; ## If 1 read the fortran pseudostates bound wave functio
 wfb_filename = "wf_octave_bound_WS"; ## Only for  wfb_fortran /= 1
 ##
 ##
-## Continuum symmetrized states
+## Continuum states
 wf_filename = "wf_octave_continuum_gen_WS";
 ##
 ## Response function filename
@@ -255,9 +255,9 @@ global idensity_save = 1;
 global qdensity_filename = "wfc_rho_gen_WS";
 ##
 ## Recompute continuum states with Fortran xgrid
-xmin = -30; # (fm)
-xmax = 30;  # (fm)
-npoints = 1003; 
+xmin = -40; # (fm)
+xmax = 40;  # (fm)
+npoints = 1503; 
 xgrid  = linspace(xmin,xmax,npoints); # Interval comprising ends with npoints points (fm)
 x_step = (xmax-xmin)/(npoints-1) # (fm)
 ##
@@ -278,9 +278,9 @@ smat_filename = "smatrix_octave_gen_WS.dat";
 continuum_symm_states_Numerov_gen_pot_1D_tise;
 ##
 ## Matrix diagonalization states
-global eigenv_file = "isqw_eigenvectors_N150_WSaxon_Moschini.dat"
+global eigenv_file = "isqw_eigenvectors_WSaxon_Moschini.dat"
 global dim_N = 250;
-global pseudostates = 20; ## Max value dim_N - bound_states;
+global pseudostates = 30; ## Max value dim_N - bound_states;
 ##
 pseudodensity_symm_states_Numerov_gen_pot_1D_tise;
 ##
