@@ -27,6 +27,7 @@ global dBdE_filename;
 ## Physical constants
 global hbarc; # MeV fm
 global amu;   # MeV / c^2
+global hsqoamu; # MeV fm^2
 ##
 ##
 ## Define global variables characterizing the 1D system
@@ -88,6 +89,9 @@ load(filename);
 wfc_asymm = savemat;
 ##
 clear savemat;
+##
+factor = (red_mass/hsqoamu)*k_values.^-1;
+##
 ####################################################################
 ####################################################################
 if (i_E == 1) # Electric dipole : x matrix element
@@ -96,10 +100,8 @@ if (i_E == 1) # Electric dipole : x matrix element
   ##
   if (isave_dBdE == 1)
     ## initialize density matrix
-    savemat_dBde_E1 = [E_values];
+    savemat_dBde_E1 = [E_values; k_values];
   endif
-  ##
-  factor = (red_mass*amu/(8*(pi**3)*hbarc*hbarc))*k_values;
   ##
   for index = 1:bound_states
     ## 
@@ -148,10 +150,8 @@ if (i_E == 2)
   ##
   if (isave_dBdE == 1)
     ## initialize density matrix
-    savemat_dBde_E2 = [E_values];
+    savemat_dBde_E2 = [E_values; k_values];
   endif
-  ##
-  factor = (red_mass*amu/(8*(pi**3)*hbarc*hbarc))*k_values;
   ##
   for index = 1:bound_states 
     for index_k = 1:n_k_points
