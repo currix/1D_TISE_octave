@@ -90,7 +90,8 @@ wfc_asymm = savemat;
 ##
 clear savemat;
 ##
-factor = (red_mass/hsqoamu)*k_values.^-1;
+factor = (red_mass/hsqoamu)*(k_values.^-1);
+###factor = k_values./k_values; # Dirty hack...
 ##
 ####################################################################
 ####################################################################
@@ -109,15 +110,17 @@ if (i_E == 1) # Electric dipole : x matrix element
       ##
       ## Gerade contribution
       integrand_E1 = transpose(wf_bound(:,index + step)).*xgrid.*wfc_symm(index_k+1,:);
-      f_symm = factor(index_k)*abs(trapz(xgrid, integrand_E1))**2;
+      ###f_symm = factor(index_k)*abs(trapz(xgrid, integrand_E1))**2;
+      f_symm = abs(trapz(xgrid, integrand_E1))**2;
       ## Ungerade contribution
       integrand_E1 = transpose(wf_bound(:,index + step)).*xgrid.*wfc_asymm(index_k+1,:);
-      f_asymm = factor(index_k)*abs(trapz(xgrid, integrand_E1))**2;
+      ###f_asymm = factor(index_k)*abs(trapz(xgrid, integrand_E1))**2;
+      f_asymm = abs(trapz(xgrid, integrand_E1))**2;
       ##
       dBde_E1(index_k) = f_symm + f_asymm;
       ##
       if ( iprint > 1 )
-        printf("dBde k = %f expected value %i-th pseudostate = %f\n", k_values(index_k), index, dBde_E1(index_k));
+        printf("dBde k = %f expected value %i-th pseudostate = %f\n", k_values(index_k), index, factor(index_k)*dBde_E1(index_k));
       endif
       ##
     endfor ## index_k loop
@@ -129,7 +132,8 @@ if (i_E == 1) # Electric dipole : x matrix element
     ##
     if (isave_dBdE == 1)
       ## E1 matrix for file output
-      savemat_dBde_E1 = [savemat_dBde_E1; dBde_E1];
+      ## Output format: E   k   dB/dk   dB/dE
+      savemat_dBde_E1 = [savemat_dBde_E1; dBde_E1; dBde_E1.*factor];
     endif
     ##
   endfor
@@ -158,12 +162,14 @@ if (i_E == 2)
       ##                            First column is the xgrid
       ##                                        V 
       integrand_E2 = transpose(wf_bound(:,index + step)).*xgrid.*xgrid.*wfc_symm(index_k+1,:);
-      f_symm = factor(index_k)*abs(trapz(xgrid, integrand_E2))**2;
+      ##f_symm = factor(index_k)*abs(trapz(xgrid, integrand_E2))**2;
+      f_symm = abs(trapz(xgrid, integrand_E2))**2;
       integrand_E2 = transpose(wf_bound(:,index + step)).*xgrid.*xgrid.*wfc_asymm(index_k+1,:);
-      f_asymm = factor(index_k)*abs(trapz(xgrid, integrand_E2))**2;
+      ##f_asymm = factor(index_k)*abs(trapz(xgrid, integrand_E2))**2;
+      f_asymm = abs(trapz(xgrid, integrand_E2))**2;
       dBde_E2(index_k) = f_symm + f_asymm;
       if ( iprint > 1 )
-        printf("dBde k = %f expected value %i-th pseudostate = %f\n", k_values(index_k), index, dBde_E2(index_k));
+        printf("dBde k = %f expected value %i-th pseudostate = %f\n", k_values(index_k), index, factor(k)*dBde_E2(index_k));
       endif
     endfor
     if ( iprint > 1 )
@@ -173,7 +179,8 @@ if (i_E == 2)
     ##
     if (isave_dBdE == 1)
       ## E2
-      savemat_dBde_E2 = [savemat_dBde_E2; dBde_E2];
+      ## Output format: E   k   dB/dk   dB/dE
+      savemat_dBde_E2 = [savemat_dBde_E2; dBde_E2; factor.*dBde_E2];
     endif
     ##
   endfor
