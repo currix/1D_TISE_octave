@@ -106,17 +106,17 @@ endif
 ##
 ## Momentum grid (fm-1)
 global k_min = 0.02; # fm-1
-global k_max = 2.5; # fm-1
-global n_k_points = 150;
+global k_max = 1.0; # fm-1
+global n_k_points = 200;
 global k_values = linspace(k_min, k_max, n_k_points); ## Vector with k_values (fm-1)
-global E_values = (k_values.*hbarc).^2/(2*red_mass*amu); ## Energy values (MeV)
+global E_values = (k_values.^2)*hsqoamu/(2*red_mass); ## Energy values (MeV)
 ##
 ## Energy grid (MeV) (uncomment next lines and comment the  k grid lines)
 ##global E_min = 0.1;  # MeV
 ##global E_max = 25.0; # MeV
 ##global n_E_points = 150;
 ##global E_values = linspace(E_min, E_max, n_E_points); ## Vector with energy values
-##global k_values = sqrt((2*red_mass*amu).*E_values)/hbarc; ## Vector with energy values
+##global k_values = sqrt((2*red_mass/hsqoamu).*E_values); ## Vector with energy values
 ##
 ##
 ## Spatial grid for continuum state calculation
@@ -194,7 +194,7 @@ endif
 ##
 ## Total Strength
 ##
-global iSum_Rules_save = 1;
+global iSum_Rules_save = 0;
 ##
 ## Continuum symmetrized states
 wf_filename = "wf_octave_continuum_gen_WS";
@@ -216,6 +216,7 @@ endif
 ##
 ##
 global isave_dBdE = 1;
+global i_E;
 ##
 ## Bound States
 global wfb_fortran = 0; ## If 1 read the fortran pseudostates bound wave functions (TO DO).
@@ -229,13 +230,15 @@ wf_filename = "wf_octave_continuum_gen_WS";
 global dBdE_filename = "response_function_continuum_gen_WS";
 ##
 ##
-global i_E = 1; ## 1 -> E1  :: 2 -> E2
+## i_E = 1; ## 1 -> E1  :: 2 -> E2
 ##
-dBdE_pure_cont_symm_states_Numerov_gen_pot_1D_tise;
+## dBdE_pure_cont_symm_states_Numerov_gen_pot_1D_tise;
 ##
 i_E = 2; ## 1 -> E1  :: 2 -> E2
 ##
 dBdE_pure_cont_symm_states_Numerov_gen_pot_1D_tise;
+##
+return
 ##
 ## Pseudodensity calculation
 ##
